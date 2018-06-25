@@ -1,0 +1,16 @@
+input[name='Search']{
+	margin-top:2%;
+}
+footer{
+	position: fixed;
+	bottom:0;
+	min-height: 3em;
+	padding-top:0.5em;
+}
+
+body{
+	background: -webkit-linear-gradient(left,violet,lightblue) ;
+	background: -moz-linear-gradient(left,violet,lightblue) ;
+	background: -o-linear-gradient(left,violet,lightblue) ;
+	background: -ms-linear-gradient(left,violet,lightblue) ;
+}
