@@ -7,6 +7,7 @@ class Employee extends CI_Controller{
 		parent::__construct();
 		$this->load->model('employeemodel','m');
 		$this->show["message"]="";
+		$this->load->library('session');
 	}
 	 function index(){
 		$this->load->view("layout/header");
@@ -34,10 +35,10 @@ class Employee extends CI_Controller{
 	}
 	function updateEmployee(){
 
-		$id = $this->input->post('uId');
-		$name = $this->input->post('uName');
-		$address= $this->input->post('uAddress');
-		 $age= $this->input->post('uAge');
+		$id = $this->input->post('Id');
+		$name = $this->input->post('Name');
+		$address= $this->input->post('Adress');
+		 $age= $this->input->post('Age');
 		
 		if ($this->m->updateEmployee($id,$name,$address,$age) )
 		{
@@ -54,11 +55,12 @@ class Employee extends CI_Controller{
 		echo json_encode($this->m->deleteUser($this->input->post("Id")));
 	}
 	function Login(){
-		$query = $this->m->Login($this->input->post('lName'),$this->input->post('lAge'));
+		$query = $this->m->Login($this->input->post('Name'),$this->input->post('Age'));
+		
 		if ($query){
-			$this->show["message"]= "Yes ";
+			$this->show["message"]= "Yes";
 		}else {
-			$this->show["message"]= "No exists";
+			$this->show["message"]= "No";
 		}
 		echo json_encode($this->show);
 	}

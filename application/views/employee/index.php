@@ -29,13 +29,17 @@
 	
 </div>
 </div>
-	
+
 	<script type="text/javascript">
 
 		showAllEmployee();
 		function showAllEmployee(){
-			
-			$.getJSON("<?php echo site_url('employee/showAllEmployee')?>",function(json){
+
+			$.getJSON('<?php echo site_url("employee/showAllEmployee")?>',function(json){
+				addData(json);	
+			})
+		}
+		function addData(json){
 				var tr= $(".rows");
 				tr.html("");
 				$.each(json,function(key,val){
@@ -43,8 +47,7 @@
 					tr.append("<td>"+val.Id+"</td> <td>"+val.Name+"</td>  <td>"+val.Adress+"</td>  <td>"+val.Age+"</td>  <td><button id='"+val.Id+"' class='btn btn-warning btn-sm btnedit' data-toggle='modal' data-target='#modalUpdate'>Edit</button>  <button id='"+val.Id+"' class='btn btn-danger btn-sm btndelete'>Delete</button> </td>");
 					tr.append("</tr>");
 				})
-								
-			})
+				
 		}
 
 		//Save employee
@@ -146,13 +149,7 @@
 			var s = $("[name='Search']").val();
 			$.post("<?php echo site_url('employee/showEmployeesByFilter')?>",{Name:s},function(json){
 				var employeejson = JSON.parse(json);
-				var tr = $(".rows");
-				tr.html("");
-				$.each (employeejson,function(key,val){
-						tr.append("<tr>");
-					tr.append("<td>"+val.Id+"</td> <td>"+val.Name+"</td>  <td>"+val.Adress+"</td>  <td>"+val.Age+"</td>  <td><button id='"+val.Id+"' class='btn btn-warning btn-sm btnedit' data-toggle='modal' data-target='#modalUpdate'>Edit</button>  <button id='"+val.Id+"' class='btn btn-danger btn-sm btndelete'>Delete</button> </td>");
-					tr.append("</tr>");
-				})
+				addData(employeejson);
 			})
 		}
 
@@ -161,29 +158,43 @@
 			var age = $("[name='lAge']").val();
 			$.post("<?php echo site_url('employee/Login')?>",{Name:name,Age:age},function(json){
 				var loginjson = JSON.parse(json);
-				swal(loginjson.message,'Message of login','error');
-			})
-		})
+				if (loginjson.message=="Yes"){
 
+					swal({
+						type:"success",
+						title:"Welcome "+name,
+						text:"You have logged successfuly",
+						timer:1000,
+						showConfirmButton:false
+					}).then((result)=>{
 
-		$(document).on("click",".txtcrud",function(){
-			swal({
-				type:'info',
-				title:'Edit user',
-				label:'Name',
-				input:'password'
-			}).then((result)=>{
+						$("#modalLogin").modal('hide');
+						
+						$(".btnsignin").hide('fast');
+						document.getElementById("addbutton").innerHTML="<button class='btn btn-danger btn-sm btnlogout'>LOG OUT </button>";
+						$(document).on("click",".btnlogout",function(){
+							<?php 
+							$this->session->unset_userdata('Name');
+							$this->session->sess_destroy();
+							?>
+						$(".btnsignin").show('fast');
 
-				if (result.value){
-					swal(result.val());
-				}else {
+						})
+					})
+				}else if (loginjson.message=="No"){
 
+					swal({
+						type:"error",
+						title:"Error to try enter",
+						text:"username or password not exists"
+					}).then((result)=>{
 
+						
+					})
 				}
-
-
 			})
 		})
+
 
 
 

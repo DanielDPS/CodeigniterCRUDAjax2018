@@ -43,7 +43,8 @@ class Employeemodel extends CI_Model{
 	function Login($name,$age)
 	{
 		$array = array("Name"=>$name,"Age"=>$age);
-		return $this->db->get_where("employees",$array)->row_array();
+		$this->session->set_userdata($array);
+		return $this->db->get_where("employees",$array)->result();
 
 	}
 
